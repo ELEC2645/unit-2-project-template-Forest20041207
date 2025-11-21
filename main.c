@@ -74,7 +74,7 @@ static void select_menu_item(int input)
 {
     switch (input) {
         case 1:
-            menu_item_1();
+            Scientific_calculator();
             go_back_to_main();
             break;
         case 2:
@@ -100,7 +100,7 @@ static void print_main_menu(void)
     printf("\n----------- Main menu -----------\n");
     printf("\n"
            "\t\t\t\t\t\t\n"
-           "\t1. Menu item 1\t\t\n"
+           "\t1. Scientific calculator\t\t\n"
            "\t2. Menu item 2\t\t\n"
            "\t3. Menu item 3\t\t\n"
            "\t4. Menu item 4\t\t\n"
