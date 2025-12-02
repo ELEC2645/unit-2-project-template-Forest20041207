@@ -6,7 +6,8 @@
 #include <string.h>
 #include <ctype.h>
 #include <math.h>
-#include "funcs.h"
+#include "Scientific_calculator.h"
+#include "Resistor_colour_code_decoder.h"
 
 /* Prototypes mirroring the C++ version */
 static void main_menu(void);            /* runs in the main loop */
@@ -29,10 +30,10 @@ int main(void)
 static void main_menu(void)
 {
     print_main_menu();
-    {
-        int input = get_user_input();
-        select_menu_item(input);
-    }
+    
+    int input = get_user_input();
+    select_menu_item(input);
+    
 }
 
 static int get_user_input(void)
@@ -78,7 +79,7 @@ static void select_menu_item(int input)
             go_back_to_main();
             break;
         case 2:
-            Resistor_colour_coede_decoder();
+            Resistor_colour_code_decoder();
             go_back_to_main();
             break;
         case 3:
