@@ -244,7 +244,7 @@ static void analyse_mixed_circuit(void) {
 
     } while (choice != 2);
 
-    printf("\nFinal Result\n");
+    printf("\nFinal Result:\n");
     print_resistance_with_units(current_resistor); 
     calculate_current(current_resistor);
 }
