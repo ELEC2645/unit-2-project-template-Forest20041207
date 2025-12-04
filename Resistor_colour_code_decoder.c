@@ -7,13 +7,6 @@ const char* colour_names[]= {"Black","Brown","Red","Orange","Yellow","Green","Bl
 const char* tolerance_colours[]= {"Brown","Red","Green","Blue","Blue","Violet","Gray","Gold","Sliver","None"};
 double tolerance_values[]= {1,2,0.5,0.25,0.1,0.05,5,10,20};
 
-//Function prototype
-void Resistor_colour_code_decoder(void)
-static void show_colour_choice()
-static int get_colour_choice(const char* prompt,int max_choice)
-static double calculate_resistance(int band1, int band2, int multiplier);
-static void print_resistance_with_units(double resistance);
-static const char* get_tolerance_color(int tolerance_choice);
 
 //Function
 static void show_color_choice(void) {
