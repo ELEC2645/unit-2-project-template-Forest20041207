@@ -83,7 +83,7 @@ static void select_menu_item(int input)
             go_back_to_main();
             break;
         case 3:
-            menu_item_3();
+            Basic_circuit_analyser();
             go_back_to_main();
             break;
         case 4:
@@ -103,7 +103,7 @@ static void print_main_menu(void)
            "\t\t\t\t\t\t\n"
            "\t1. Scientific calculator\t\t\n"
            "\t2. Resistor colour code decoder\t\t\n"
-           "\t3. Menu item 3\t\t\n"
+           "\t3. Basic circuit analyser\t\t\n"
            "\t4. Menu item 4\t\t\n"
            "\t5. Exit\t\t\t\t\n"
            "\t\t\t\t\t\t\n");

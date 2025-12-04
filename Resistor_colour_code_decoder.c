@@ -12,7 +12,7 @@ void Resistor_colour_code_decoder(void)
 static void show_colour_choice()
 static int get_colour_choice(const char* prompt,int max_choice)
 static double calculate_resistance(int band1, int band2, int multiplier);
-static void print_resistance_with_units(double resistance, int multiplier);
+static void print_resistance_with_units(double resistance);
 static const char* get_tolerance_color(int tolerance_choice);
 
 //Function
@@ -61,21 +61,17 @@ static const char* get_tolerance_color(int tolerance_choice) {
 
 
 static void print_resistance_with_units(double resistance, int multiplier) {
-    const char* units[] = {"Ω", "kΩ", "MΩ", "GΩ"};
-    int unit = 0;
-    double value = resistance;
-        
-    while (value >= 1000.0 && unit < 3) {
-            value /= 1000.0;
-            unit++;
-    }  
-    printf("Resistance: %.2f %s", value, units[unit]);
-        
-    if (multiplier >= 0) {
-        printf(" (%.0f * 10^%d Ω)", resistance / pow(10, multiplier), multiplier);
+    if (resistance >= 1000000000) {
+        printf("Resistance: %.3f GΩ", resistance / 1000000000.0);
+    } 
+    else if (resistance >= 1000000) {
+        printf("Resistance: %.3f MΩ", resistance / 1000000.0);
+    } 
+    else if (resistance >= 1000) {
+        printf("Resistance: %.3f KΩ", resistance / 1000.0);
     } 
     else {
-            printf(" (%.3f Ω)", resistance);
+        printf("Resistance: %.3f Ω", resistance);
         }
     }
 
@@ -101,6 +97,6 @@ void Resistor_colour_code_decoder(void) {
     printf("Color Code: %s - %s - %s - %s\n", color_names[band1], color_names[band2], 
             color_names[multiplier], tolerance1);
         
-    print_resistance_with_units(resistance, multiplier);
+    print_resistance_with_units(resistance);
     printf("\nTolerance: %s\n", tolerance1);
 }
