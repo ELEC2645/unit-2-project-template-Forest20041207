@@ -8,14 +8,22 @@ const char* tolerance_colours[]= {"Brown","Red","Green","Blue","Blue","Violet","
 double tolerance_values[]= {1,2,0.5,0.25,0.1,0.05,5,10,20};
 
 
+void Resistor_colour_code_decoder(void);
+static void show_colour_choice();
+static int get_colour_choice(const char* prompt,int max_choice);
+static double calculate_resistance(int band1, int band2, int multiplier);
+static void print_resistance_with_units(double resistance);
+static const char* get_tolerance_color(int tolerance_choice);
+
+
 //Function
-static void show_color_choice(void) {
+static void show_colour_choice(void) {
         printf("Color Code Chart\n");
         printf("0: Black\n1: Brown\n2: Red\n3: Orange\n4: Yellow\n5: Green\n6: Blue\n7: Violet\n8: Gray\n9: White\n");
     }
 
 
-static int get_color_choice(const char* prompt, int max_choice) {
+static int get_colour_choice(const char* prompt, int max_choice) {
         int choice;
         while (1) {
             printf("%s", prompt);
@@ -53,7 +61,7 @@ static const char* get_tolerance_color(int tolerance_choice) {
     }
 
 
-static void print_resistance_with_units(double resistance, int multiplier) {
+static void print_resistance_with_units(double resistance) {
     if (resistance >= 1000000000) {
         printf("Resistance: %.3f GΩ", resistance / 1000000000.0);
     } 
@@ -71,24 +79,24 @@ static void print_resistance_with_units(double resistance, int multiplier) {
 
 void Resistor_colour_code_decoder(void) {
     printf("Enter the color codes for each band:\n");
-    show_color_chart();
+    show_colour_choice();
         
-    int band1 = get_color_choice("First band: ", 9);
-    int band2 = get_color_choice("Second band: ", 9);
-    int multiplier = get_color_choice("Third band: ", 9);
+    int band1 = get_colour_choice("First band: ", 9);
+    int band2 = get_colour_choice("Second band: ", 9);
+    int multiplier = get_colour_choice("Third band: ", 9);
         
     printf("\nTolerance Colors\n");
-    printf("0: Brown (±1%%)\n1: Red (±2%%)\n2: Green (±0.5%%)\n3: Blue (±0.25%%)\n4: Violet (±0.1%%)\n
-        5: Gray (±0.05%%)\n6: Gold (±5%%)\n7: Silver (±10%%)\n8: None (±20%%)\n");
+    printf("0: Brown (±1%%)\n""1: Red (±2%%)\n""2: Green (±0.5%%)\n""3: Blue (±0.25%%)\n""4: Violet (±0.1%%)\n");
+    printf("5: Gray (±0.05%%)\n""6: Gold (±5%%)\n""7: Silver (±10%%)\n""8: None (±20%%)\n");
     
 
-    int tolerance = get_color_choice("Fourth band (tolerance): ", 8);
+    int tolerance = get_colour_choice("Fourth band (tolerance): ", 8);
     double resistance = calculate_resistance(band1, band2, multiplier);
     const char* tolerance1 = get_tolerance_color(tolerance);
         
     printf("\nDecoding Results\n");
-    printf("Color Code: %s - %s - %s - %s\n", color_names[band1], color_names[band2], 
-            color_names[multiplier], tolerance1);
+    printf("Color Code: %s - %s - %s - %s\n", colour_names[band1], colour_names[band2], 
+            colour_names[multiplier], tolerance1);
         
     print_resistance_with_units(resistance);
     printf("\nTolerance: %s\n", tolerance1);

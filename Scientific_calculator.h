@@ -2,12 +2,11 @@
 #define SCIENTIFIC_CALCULATOR_H
 
 // Function declaration
-//Function 
 void Scientific_calculator(void);
 static void show_calculator_menu();
 static void clear_input_buffer();
-static double get_input());
-static int get_choice(int choice);
+static int get_input();
+static void get_choice(int choice);
 static void basic_calculator();
 static void scientific_functions();
 static void unit_conversions();
@@ -24,7 +23,7 @@ static int  is_integer(const char *s);
     static double sine(double angle);
     static double cosine(double angle);
     static double tangent(double angle);
-    static double log(double x);
+    static double logarithm(double x);
     static double square_root(double x);
 
     //Unit conversions

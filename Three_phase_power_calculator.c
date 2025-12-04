@@ -6,6 +6,15 @@
 #define PI 3.141592654 
 
 
+
+// Function declaration
+void Three_phase_power_calculator(void);
+static void calculate_three_phase_power(void);
+static double calculate_power_factor(double angle_degrees);
+static void print_power_with_units(double value, const char* unit);
+
+
+
 //Functions
 static double calculate_power_factor(double angle_degrees) {
     double angle_radians = angle_degrees * (PI / 180.0);
