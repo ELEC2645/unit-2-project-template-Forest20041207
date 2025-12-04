@@ -8,6 +8,9 @@
 #include <math.h>
 #include "Scientific_calculator.h"
 #include "Resistor_colour_code_decoder.h"
+#include "Basic_circuit_analyser.h"
+#include "Three_phase_power_calculator.h"
+
 
 /* Prototypes mirroring the C++ version */
 static void main_menu(void);            /* runs in the main loop */
