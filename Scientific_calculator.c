@@ -11,13 +11,15 @@
 // Function declaration
 void Scientific_calculator(void);
 static void show_calculator_menu();
-static void clear_input_buffer();
 static int get_input();
 static void get_choice(int choice);
 static void basic_calculator();
 static void scientific_functions();
 static void unit_conversions();
 static int  is_integer(const char *s);
+static double safe_double();
+static int safe_int_range(int min, int max);
+
 
     //Basic calculator
     static double add(double a, double b);
@@ -41,31 +43,28 @@ static int  is_integer(const char *s);
     static double radians_to_degrees(double radians);
     static double degrees_to_radians(double degrees);
 
-
 //Functions
 void Scientific_calculator(void) {
-    printf("\nScientific calculator\n");
-    while (1) {
-        show_calculator_menu();
+    for(;;) {
+       show_calculator_menu();
         int choice = get_input();
         get_choice(choice);
+        if (choice == 4) {
+        printf("Return to Main Menu...\n");
+        return;
+    }
     }
 }
 
 
  static void show_calculator_menu() {
-    printf("\nMain Menu\n");
+    printf("\n----------- Scientific calculator -----------\n");
     printf("1. Basic Calculator (+, -, *, /, ^)\n");
     printf("2. Scientific Functions (sin, cos, tan, log, sqrt)\n");
     printf("3. Unit Conversions\n");
     printf("4. Exit\n");
 }
    
-static void clear_input_buffer() {
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF);
-}
-
 
 static int is_integer(const char *s)
 {
@@ -87,7 +86,7 @@ static int is_integer(const char *s)
 
 static int get_input(void)
 {
-    enum { MENU_ITEMS = 3 };   
+    enum { MENU_ITEMS = 4 };   
     char buf[128];
     int valid_input = 0;
     int value = 0;
@@ -136,12 +135,10 @@ static void get_choice(int choice)
                 break;
             case 4:
                 printf("Thank you for using the Scientific Calculator. \n");
-                break;
+                return;
             default:
                 printf("Invalid choice. Please try again.\n");
         }
-        
-        printf("\n");
     }
 
 
@@ -171,16 +168,16 @@ static double power(double base, double exponent) {
 }
 
 static void basic_calculator() {
-    printf("\n=== Basic Calculator ===\n");
+    printf("\n------ Basic Calculator ------\n");
     
     double num1;
     double num2;
     double result;
 
-    printf("Enter the number1:\n");
-    scanf("%lf", &num1);
-    printf("Enter the number2:\n");
-    scanf("%lf", &num2);
+    printf("\nEnter the number1:");
+    num1 = safe_double();
+    printf("\nEnter the number2:");
+    num2 = safe_double();
     
     printf("1. Addition (+)\n");
     printf("2. Subtraction (-)\n");
@@ -190,7 +187,7 @@ static void basic_calculator() {
     
     int operation;
     printf("\nSelect item: ");
-    scanf("%d", &operation); 
+    operation = safe_int_range(1, 5);
     switch (operation) {
         case 1:
             result = add(num1, num2);
@@ -258,47 +255,47 @@ static void scientific_functions() {
     int function;
     double input, result;
 
-    printf("\n=== Scientific Functions ===\n");
+    printf("\n------- Scientific Functions ------\n");
     printf("1. Sine (sin)\n");
     printf("2. Cosine (cos)\n");
     printf("3. Tangent (tan)\n");
     printf("4. Logarithm base 10 (log)\n");
     printf("5. Square Root (sqrt)\n");
     printf("\nSelect item: ");
-    scanf("%d", &function); 
+    function = safe_int_range(1, 5);
     
     
     
     switch (function) {
         case 1:
-            printf("Enter the number in degrees:\n");
-            scanf("%lf", &input);
+            printf("\nEnter the number in degrees:");
+            input = safe_double();
             result = sine(input);
             printf("sin(%.6f°) = %.6f\n", input, result);
             break;
         case 2:
-            printf("Enter the number in degrees:\n");
-            scanf("%lf", &input);
+            printf("\nEnter the number in degrees:");
+            input = safe_double();
             result = cosine(input);
             printf("cos(%.6f°) = %.6f\n", input, result);
             break;
         case 3:
-            printf("Enter the number in degrees:\n");
-            scanf("%lf", &input);
+            printf("\nEnter the number in degrees:");
+            input = safe_double();
             result = tangent(input);
             printf("tan(%.6f°) = %.6f\n", input, result);
             break;
         case 4:
-            printf("Enter the number:\n");
-            scanf("%lf", &input);
+            printf("\nEnter the number:");
+            input = safe_double();
             result = logarithm(input);
             if (input > 0) {
                 printf("log10(%.6f) = %.6f\n", input, result);
             }
             break;
         case 5:
-            printf("Enter the number:\n");
-            scanf("%lf", &input);
+            printf("\nEnter the number:");
+            input = safe_double();
             result = square_root(input);
             if (input >= 0) {
                 printf("sqrt(%.6f) = %.6f\n", input, result);
@@ -337,30 +334,30 @@ static double degrees_to_radians(double degrees) {
 static void unit_conversions() {
     int conversion;
     double input, result;
-    printf("\n=== Unit Conversions ===\n");
+    printf("\n------ Unit Conversions ------\n");
     printf("1. Temperature (Celsius ↔ Fahrenheit)\n");
     printf("2. Length (Meters ↔ Feet)\n");
     printf("3. Angles (Degrees ↔ Radians)\n");
-    printf("Select conversion type:\n");
-    scanf("%d", &conversion); 
+    printf("\nSelect conversion type:");
+    conversion = safe_int_range(1, 3);
     
     switch (conversion) {
         case 1:
             printf("1. Celsius to Fahrenheit\n");
             printf("2. Fahrenheit to Celsius\n");
-            printf("Select conversion type:\n");
-            
+            printf("\nSelect conversion type:");
             int conversion2;
-            scanf("%d", &conversion2);
+            conversion2 = safe_int_range(1, 2);
+            
             if (conversion2 == 1) {
-                printf("Enter temperature in Celsius:\n");
-                scanf("%lf", &input);
+                printf("\nEnter temperature in Celsius:");
+                input = safe_double();
                 result = celsius_to_fahrenheit(input);
                 printf("%.6f°C = %.6f°F\n", input, result);
             } 
             else if (conversion2 == 2) {
-                printf("Enter temperature in Fahrenheit:\n");
-                scanf("%lf", &input);
+                printf("\nEnter temperature in Fahrenheit:");
+                input = safe_double();
                 result = fahrenheit_to_celsius(input);
                 printf("%.6f°F = %.6f°C\n", input, result);
             } 
@@ -368,23 +365,24 @@ static void unit_conversions() {
                 printf("Invalid choice.\n");
             }
             break;
+        
+
         case 2:
             printf("1. Meters to Feet\n");
             printf("2. Feet to Meters\n");
-            printf("Select conversion type:\n");
-            
+            printf("\nSelect conversion type:");
             int conversion3;
-            scanf("%d", &conversion3);
+            conversion3 = safe_int_range(1, 2);
         
             if (conversion3 == 1) {
-                printf("Enter length in meters:\n");
-                scanf("%lf", &input);
+                printf("\nEnter length in meters:");
+                input = safe_double();
                 result = meters_to_feet(input);
                 printf("%.6f meters = %.6f feet\n", input, result);
             } 
             else if (conversion3 == 2) {
-                printf("Enter length in Feet:\n");
-                scanf("%lf", &input);
+                printf("\nEnter length in Feet:");
+                input = safe_double();
                 result = feet_to_meters(input);
                 printf("%.6f feet = %.6f meters\n", input, result);
             } 
@@ -392,22 +390,24 @@ static void unit_conversions() {
                 printf("Invalid choice.\n");
             }
             break;
+        
+
         case 3:
             printf("1. Degrees to Radians\n");
             printf("2. Radians to Degrees\n");
-            printf("Select conversion type:\n");
+            printf("\nSelect conversion type:");
             int conversion4;
-            scanf("%d", &conversion4);
+            conversion4 = safe_int_range(1, 2);
             
             if (conversion4 == 1) {
-                printf("Enter angle in Degrees:\n");
-                scanf("%lf", &input);
+                printf("\nEnter angle in Degrees:");
+                input = safe_double();
                 result = degrees_to_radians(input);
                 printf("%.6f° = %.6f radians\n", input, result);
             } 
             else if (conversion4 == 2) {
-                printf("Enter angle in Radians:\n");
-                scanf("%lf", &input);
+                printf("\nEnter angle in Radians:");
+                input = safe_double();
                 result = radians_to_degrees(input);
                 printf("%.6f radians = %.6f°\n", input, result);
             } 
@@ -419,6 +419,40 @@ static void unit_conversions() {
         default:
             printf("Invalid conversion selection.\n");
     }
+}
+
+
+//Protection
+double safe_double()
+{
+    double value;
+    char c;
+
+    while (scanf("%lf", &value) != 1)
+    {
+        printf("\nError: please enter a valid number:");
+        while ((c = getchar()) != '\n' && c != EOF);
+    }
+    while ((c = getchar()) != '\n' && c != EOF);
+
+    return value;
+}
+
+
+int safe_int_range(int min, int max)
+{
+    double temp;    
+    char c;
+
+    while (scanf("%lf", &temp) != 1 || temp != (int)temp || temp < min || temp > max)
+    {
+        printf("\nError: please input an integer between %d and %d:", min, max);
+        while ((c = getchar()) != '\n' && c != EOF);
+    }
+
+    while ((c = getchar()) != '\n' && c != EOF);
+
+    return (int)temp;
 }
 
    
