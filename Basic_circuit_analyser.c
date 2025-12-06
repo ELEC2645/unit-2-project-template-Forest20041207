@@ -12,6 +12,10 @@ static void calculate_current(double resistance);
 static void print_resistance_with_units(double resistance);
 static double calculate_series_resistance(double* resistors, int number);
 static double calculate_parallel_resistance(double* resistors, int number);
+static double safe_double();
+static double safe_positive_double();
+static int safe_int_range(int min, int max);
+
 
 
 //Function
@@ -19,13 +23,13 @@ void Basic_circuit_analyser() {
     int choice;
 
     do {
-        printf("\nBasic Circuit Analyser\n");
+        printf("\n----------- Basic Circuit Analyser -----------\n");
         printf("1. Analyse Series Circuit\n");
         printf("2. Analyse Parallel Circuit\n");
         printf("3. Analyse Mixed Circuit\n");
         printf("4. Exit\n"); 
         printf("Enter your choice: ");
-        scanf("%d", &choice);
+        choice = safe_int_range(1, 4);
 
         switch (choice) {
             case 1:
@@ -38,7 +42,7 @@ void Basic_circuit_analyser() {
                 analyse_mixed_circuit();
                 break;
             case 4: 
-                printf("Exit.\n");
+                printf("Thank you for using the Basic circuit analyser\nReturn to Main Menu...\n");
                 break;
             default:
                 printf("Invalid choice.\n");
@@ -53,9 +57,10 @@ static void calculate_current(double resistance) {
     }
     
     double voltage;
-    printf("\n--- Current Calculation ---\n");
+    printf("\n------ Current Calculation ------\n");
     printf("Enter Voltage source (Volts): ");
-    scanf("%lf", &voltage);
+    voltage = safe_double();
+
     double current = voltage / resistance;
 
     printf("Total Current: ");
@@ -81,10 +86,6 @@ static double calculate_series_resistance(double* resistors, int number) {
 static double calculate_parallel_resistance(double* resistors, int number) {
     double total_inverse = 0;
     for (int i = 0; i < number; i++) {
-        if (resistors[i] <= 0) {
-            printf("Error: Resistor %d has invalid value (must be > 0)\n", i+1);
-            return 0;
-        }
         total_inverse += 1.0 / resistors[i];
     }
     return 1.0 / total_inverse;
@@ -108,21 +109,17 @@ static void print_resistance_with_units(double resistance) {
 static void analyse_series_circuit(void) {
     int series_resistors;
     
-    printf("\nSeries Circuit Analysis\n");
+    printf("\n------ Series Circuit Analysis ------\n");
     printf("Enter number of resistors in series: ");
-    scanf("%d", &series_resistors);
-        
-    if (series_resistors <= 0) {
-        printf("Please enter a valid value.\n");
-        return;
-    }
+    series_resistors = safe_int_range(1, 100);
         
     double* resistors = (double*)malloc(series_resistors * sizeof(double));
         
     printf("Enter resistor values (in ohms):\n");
     for (int i = 0; i < series_resistors; i++) {
         printf("R%d: ", i+1);
-        scanf("%lf", &resistors[i]);
+        resistors[i] = safe_positive_double();
+
     }
         
     double total_resistance = calculate_series_resistance(resistors, series_resistors);
@@ -136,21 +133,16 @@ static void analyse_series_circuit(void) {
 
 static void analyse_parallel_circuit(void) {
     int parallel_resistors;
-    printf("\nParallel Circuit Analysis\n");
+    printf("\n------ Parallel Circuit Analysis ------\n");
     printf("Enter number of resistors in parallel: ");
-    scanf("%d", &parallel_resistors);
-        
-    if (parallel_resistors <= 0) {
-        printf("Please enter a valid value.\n");
-        return;
-    }
+    parallel_resistors = safe_int_range(1, 100);
         
     double* resistors = (double*)malloc(parallel_resistors * sizeof(double));
         
     printf("Enter resistor values (in ohms):\n");
     for (int i = 0; i < parallel_resistors; i++) {
         printf("R%d: ", i+1);
-        scanf("%lf", &resistors[i]);
+        resistors[i] = safe_positive_double();
     }
         
     double total_resistance = calculate_parallel_resistance(resistors, parallel_resistors);
@@ -163,7 +155,7 @@ static void analyse_parallel_circuit(void) {
 }
 
 static void analyse_mixed_circuit(void) {
-    printf("\nAnalyse_mixed_circuit\n");
+    printf("\n------ Analyse_mixed_circuit ------\n");
     printf("Start with 2 resistors, then add more one by one\n");
       
     double current_resistor;
@@ -172,18 +164,15 @@ static void analyse_mixed_circuit(void) {
         
     printf("Enter first two resistors\n");
     printf("Resistor 1 (ohms): ");
-    scanf("%lf", &R1);
+    R1 = safe_positive_double();
     printf("Resistor 2 (ohms): ");
-    scanf("%lf", &R2);
+    R2 = safe_positive_double();
         
-    if (R1 <= 0 || R2 <= 0) {
-        printf("Error: Resistor values must be positive\n");
-        return;
-    }
         
     printf("\nHow are these resistors connected?\n1. Series\n2. Parallel\n");
     printf("Choice (1-2): ");
-    scanf("%d", &connection);
+    connection = safe_int_range(1, 2);
+
     
     double temp_resistors[2];
     temp_resistors[0] = R1;
@@ -208,24 +197,20 @@ static void analyse_mixed_circuit(void) {
         printf("\nDo you want to add another resistor to this equivalent circuit?\n");
         printf("1. Yes\n2. No (Finish calculation)\n");
         printf("Choice: ");
-        scanf("%d", &choice);
+        choice = safe_int_range(1, 2);
 
         if (choice == 1) {
             double next_R;
             int next_conn;
 
             printf("Enter next resistor value (ohms): ");
-            scanf("%lf", &next_R);
+            next_R = safe_positive_double();
 
-            if (next_R <= 0) {
-                printf("Error: Resistor must be positive.\n");
-                return;
-            }
 
             printf("How is this resistor connected to the previous equivalent circuit (%f Ohms)?\n", current_resistor);
             printf("1. Series\n2. Parallel\n");
             printf("Choice: ");
-            scanf("%d", &next_conn);
+            next_conn = safe_int_range(1, 2);
 
             temp_resistors[0] = current_resistor;
             temp_resistors[1] = next_R;
@@ -251,6 +236,44 @@ static void analyse_mixed_circuit(void) {
     calculate_current(current_resistor);
 }
 
+
+//Protection
+static double safe_double() {
+    double value;
+    char c;
+
+    while (scanf("%lf", &value) != 1) {
+        printf("Invalid input! Enter a number: ");
+        while ((c = getchar()) != '\n' && c != EOF);
+    }
+
+    while ((c = getchar()) != '\n' && c != EOF);
+    return value;
+}
+
+static double safe_positive_double() {
+    double value;
+    do {
+        value = safe_double();
+        if (value <= 0) printf("Value must be > 0. Enter again: ");
+    } while (value <= 0);
+
+    return value;
+}
+
+static int safe_int_range(int min, int max) {
+    double temp;
+    char c;
+
+    while (scanf("%lf", &temp) != 1 || temp != (int)temp || (int)temp < min || (int)temp > max)
+    {
+        printf("Enter an integer between %d and %d: ", min, max);
+        while ((c = getchar()) != '\n' && c != EOF);
+    }
+
+    while ((c = getchar()) != '\n' && c != EOF);
+    return (int)temp;
+}
 
 
 
