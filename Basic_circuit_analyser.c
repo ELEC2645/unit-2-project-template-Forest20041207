@@ -60,6 +60,10 @@ static void calculate_current(double resistance) {
     printf("\n------ Current Calculation ------\n");
     printf("Enter Voltage source (Volts): ");
     voltage = safe_double();
+    if (voltage < 0) {
+        printf("Voltage cannot be negative.\n");
+        return;
+    }
 
     double current = voltage / resistance;
 
@@ -75,6 +79,7 @@ static void calculate_current(double resistance) {
     }
 }
 
+
 static double calculate_series_resistance(double* resistors, int number) {
     double total = 0;
     for (int i = 0; i < number; i++) {
@@ -83,6 +88,7 @@ static double calculate_series_resistance(double* resistors, int number) {
     return total;
 }
 
+
 static double calculate_parallel_resistance(double* resistors, int number) {
     double total_inverse = 0;
     for (int i = 0; i < number; i++) {
@@ -90,6 +96,7 @@ static double calculate_parallel_resistance(double* resistors, int number) {
     }
     return 1.0 / total_inverse;
 }
+
 
 static void print_resistance_with_units(double resistance) {
     if (resistance >= 1000000000) {
@@ -105,6 +112,7 @@ static void print_resistance_with_units(double resistance) {
         printf("Resistance: %.3f Ω\n", resistance);
     }
 }
+
 
 static void analyse_series_circuit(void) {
     int series_resistors;
@@ -131,6 +139,7 @@ static void analyse_series_circuit(void) {
     free(resistors);
 }
 
+
 static void analyse_parallel_circuit(void) {
     int parallel_resistors;
     printf("\n------ Parallel Circuit Analysis ------\n");
@@ -153,6 +162,7 @@ static void analyse_parallel_circuit(void) {
     
     free(resistors);
 }
+
 
 static void analyse_mixed_circuit(void) {
     printf("\n------ Analyse_mixed_circuit ------\n");
