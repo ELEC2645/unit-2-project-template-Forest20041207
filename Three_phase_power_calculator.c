@@ -12,6 +12,8 @@ void Three_phase_power_calculator(void);
 static void calculate_three_phase_power(void);
 static double calculate_power_factor(double angle_degrees);
 static void print_power_with_units(double value, const char* unit);
+static double safe_double(void);
+static int safe_int_range(int min, int max);
 
 
 
@@ -26,16 +28,16 @@ static void print_power_with_units(double value, const char* unit) {
     double absolute_value = fabs(value); 
     
     if (absolute_value >= 1000000000.0) {
-        printf("%.3f G%s\n", absolute_value / 1000000000.0, unit);
+        printf("%.3f G%s\n", value / 1000000000.0, unit);
     } 
     else if (absolute_value >= 1000000.0) {
-        printf("%.3f M%s\n", absolute_value / 1000000.0, unit);
+        printf("%.3f M%s\n", value / 1000000.0, unit);
     } 
     else if (absolute_value >= 1000.0) {
-        printf("%.3f k%s\n", absolute_value / 1000.0, unit);
+        printf("%.3f k%s\n", value / 1000.0, unit);
     } 
     else {
-        printf("%.3f %s\n", absolute_value, unit);
+        printf("%.3f %s\n", value, unit);
     }
 }
 
@@ -48,35 +50,16 @@ static void calculate_three_phase_power(void) {
     printf("1. Star Connection (Y)\n");
     printf("2. Delta Connection (Δ)\n");
     printf("Enter choice: ");
-    
-    if (scanf("%d", &connection_choice) != 1 || (connection_choice != 1 && connection_choice != 2)) {
-        printf("Invalid input.\n");
-        while (getchar() != '\n');
-        return;
-    }
-    while (getchar() != '\n');
+    connection_choice = safe_int_range(1, 2);
 
     printf("Enter Line Voltage (V): ");
-    if (scanf("%lf", &line_voltage) != 1 || line_voltage <= 0) {
-        printf("Line voltage must be a positive value.\n");
-        while (getchar() != '\n');
-        return;
-    }
+    line_voltage = safe_double();
     
     printf("Enter Line Current (A): ");
-    if (scanf("%lf", &line_current) != 1 || line_current <= 0) {
-        printf("Line current must be a positive value.\n");
-        while (getchar() != '\n');
-        return;
-    }
+    line_current = safe_double();
 
     printf("Enter Phase Angle φ (degrees, positive for Inductive, negative for Capacitive): ");
-    if (scanf("%lf", &phase_angle) != 1) {
-        printf("Invalid phase angle input.\n");
-        while (getchar() != '\n');
-        return;
-    }
-    while (getchar() != '\n');
+    phase_angle = safe_double();
 
     double power_factor = calculate_power_factor(phase_angle);
     double cos_phi = power_factor;
@@ -97,24 +80,24 @@ static void calculate_three_phase_power(void) {
     }
     
     printf("Power Factor (PF): %.4f ", fabs(cos_phi)); 
-    if (phase_angle > 0.001) {
+    if (phase_angle > 0) {
         printf("(Lagging/Inductive)\n");
     } 
-    else if (phase_angle < -0.001) {
+    else if (phase_angle < 0) {
         printf("(Leading/Capacitive)\n");
     } 
     else {
         printf("(Resistive)\n");
     }
     
-    printf("1. Total Apparent Power (S): \n");
+    printf("1. Total Apparent Power (S): ");
     print_power_with_units(apparent_power_S, "VA");
     
-    printf("2. Total Active Power (P): \n");
+    printf("2. Total Active Power (P): ");
     print_power_with_units(active_power_P, "W");
     
-    printf("3. Total Reactive Power (Q): \n");
-    print_power_with_units(reactive_power_Q, "VAR"); // prints absolute value internally
+    printf("3. Total Reactive Power (Q): ");
+    print_power_with_units(reactive_power_Q, "VAR"); 
     
     
     if (connection_choice == 1) { 
@@ -132,25 +115,18 @@ void Three_phase_power_calculator(void) {
     int choice = 0;
     
     do {
-        printf("\nThree-Phase Power Calculator\n");
+        printf("\n----------- Three-Phase Power Calculator -----------\n");
         printf("1. Start Calculation\n");
-        printf("2. Back to Main Menu (Exit)\n");
+        printf("2. Exit\n");
         printf("Enter your choice: ");
-        
-        if (scanf("%d", &choice) != 1) {
-            printf("Invalid input. Please re-enter.\n");
-            while (getchar() != '\n');
-            choice = 0;
-            continue;
-        }
-        while (getchar() != '\n'); 
+        choice = safe_int_range(1, 2);
 
         switch (choice) {
             case 1:
                 calculate_three_phase_power();
                 break;
             case 2:
-                printf("Exiting Three-Phase Power Calculator.\n");
+                printf("Thank you for using the Three-Phase Power Calculator.\nReturn to Main Menu...\n");
                 break;
             default:
                 printf("Invalid option.\n");
@@ -158,3 +134,32 @@ void Three_phase_power_calculator(void) {
     } while (choice != 2);
 }
 
+
+
+static double safe_double(void) {
+    double value;
+    char c;
+
+    while (scanf("%lf", &value) != 1) {
+        printf("Invalid input! Enter a number: ");
+        while ((c = getchar()) != '\n' && c != EOF);
+    }
+
+    while ((c = getchar()) != '\n' && c != EOF);
+    return value;
+}
+
+
+static int safe_int_range(int min, int max) {
+    double temp;
+    char c;
+
+    while (scanf("%lf", &temp) != 1 || temp != (int)temp || (int)temp < min || (int)temp > max)
+    {
+        printf("Enter an integer between %d and %d: ", min, max);
+        while ((c = getchar()) != '\n' && c != EOF);
+    }
+
+    while ((c = getchar()) != '\n' && c != EOF);
+    return (int)temp;
+}
