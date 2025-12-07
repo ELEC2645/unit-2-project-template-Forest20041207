@@ -4,7 +4,6 @@
 // Function declaration
 void Scientific_calculator(void);
 static void show_calculator_menu();
-static void clear_input_buffer();
 static int get_input();
 static void get_choice(int choice);
 static void basic_calculator();

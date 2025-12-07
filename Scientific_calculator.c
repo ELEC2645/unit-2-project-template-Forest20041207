@@ -57,13 +57,17 @@ void Scientific_calculator(void) {
 }
 
 
- static void show_calculator_menu() {
-    printf("\n----------- Scientific calculator -----------\n");
-    printf("1. Basic Calculator (+, -, *, /, ^)\n");
-    printf("2. Scientific Functions (sin, cos, tan, log, sqrt)\n");
+static void show_calculator_menu(void)
+{
+    printf("\n----------- Scientific Calculator -----------\n");
+    printf("1. Basic Calculator\n");
+    printf("2. Scientific Functions\n");
     printf("3. Unit Conversions\n");
-    printf("4. Exit\n");
+    printf("4. Return to Main Menu\n");
+    printf("--------------------------------------------\n");
+    printf("Select an option: ");
 }
+
    
 
 static int is_integer(const char *s)
@@ -167,6 +171,7 @@ static double power(double base, double exponent) {
     return pow(base, exponent);
 }
 
+
 static void basic_calculator() {
     printf("\n------ Basic Calculator ------\n");
     
@@ -191,25 +196,35 @@ static void basic_calculator() {
     switch (operation) {
         case 1:
             result = add(num1, num2);
-            printf("Result: %.6f + %.6f = %.6f\n", num1, num2, result);
+            printf("\n----------- Calculation Result -----------\n");
+            printf("%.6f + %.6f = %.6f\n", num1, num2, result);
+            printf("-----------------------------------------\n");
             break;
         case 2:
             result = subtract(num1, num2);
-            printf("Result: %.6f - %.6f = %.6f\n", num1, num2, result);
+            printf("\n----------- Calculation Result -----------\n");
+            printf("%.6f + %.6f = %.6f\n", num1, num2, result);
+            printf("-----------------------------------------\n");
             break;
         case 3:
             result = multiply(num1, num2);
-            printf("Result: %.6f * %.6f = %.6f\n", num1, num2, result);
+            printf("\n----------- Calculation Result -----------\n");
+            printf("%.6f + %.6f = %.6f\n", num1, num2, result);
+            printf("-----------------------------------------\n");
             break;
         case 4:
             result = divide(num1, num2);
             if (num2 != 0) {
-                printf("Result: %.6f / %.6f = %.6f\n", num1, num2, result);
+                printf("\n----------- Calculation Result -----------\n");
+                printf("%.6f + %.6f = %.6f\n", num1, num2, result);
+                printf("-----------------------------------------\n");
             }
             break;
         case 5:
             result = power(num1, num2);
-            printf("Result: %.6f ^ %.6f = %.6f\n", num1, num2, result);
+            printf("\n----------- Calculation Result -----------\n");
+            printf("%.6f + %.6f = %.6f\n", num1, num2, result);
+            printf("-----------------------------------------\n");
             break;
         default:
             printf("Invalid operation selection.\n");
@@ -221,13 +236,15 @@ static double sine(double angle) {
     return sin(degrees_to_radians(angle));
 }
 
+
 static double cosine(double angle) {
     return cos(degrees_to_radians(angle));
 }
 
+
 static double tangent(double angle) {
     double angle_radians = degrees_to_radians(angle);
-    if (fmod(angle, 180) == 90) {
+    if (fabs(fmod(angle, 180.0)) == 90.0) {
         printf("Tangent is undefined for angle %.1f°！\n", angle);
         return 0;
     }
@@ -251,6 +268,7 @@ static double square_root(double x) {
     return sqrt(x);
 }
 
+
 static void scientific_functions() {
     int function;
     double input, result;
@@ -271,26 +289,34 @@ static void scientific_functions() {
             printf("\nEnter the number in degrees:");
             input = safe_double();
             result = sine(input);
+            printf("\n----------- Calculation Result -----------\n");
             printf("sin(%.6f°) = %.6f\n", input, result);
+            printf("-----------------------------------------\n");
             break;
         case 2:
             printf("\nEnter the number in degrees:");
             input = safe_double();
             result = cosine(input);
+            printf("\n----------- Calculation Result -----------\n");
             printf("cos(%.6f°) = %.6f\n", input, result);
+            printf("-----------------------------------------\n");
             break;
         case 3:
             printf("\nEnter the number in degrees:");
             input = safe_double();
             result = tangent(input);
+            printf("\n----------- Calculation Result -----------\n");
             printf("tan(%.6f°) = %.6f\n", input, result);
+            printf("-----------------------------------------\n");
             break;
         case 4:
             printf("\nEnter the number:");
             input = safe_double();
             result = logarithm(input);
             if (input > 0) {
-                printf("log10(%.6f) = %.6f\n", input, result);
+                printf("\n----------- Calculation Result -----------\n");
+                printf("log10(%.6f°) = %.6f\n", input, result);
+                printf("-----------------------------------------\n");
             }
             break;
         case 5:
@@ -298,7 +324,9 @@ static void scientific_functions() {
             input = safe_double();
             result = square_root(input);
             if (input >= 0) {
-                printf("sqrt(%.6f) = %.6f\n", input, result);
+                printf("\n----------- Calculation Result -----------\n");
+                printf("sqrt(%.6f°) = %.6f\n", input, result);
+                printf("-----------------------------------------\n");
             }
             break;
         default:
@@ -353,13 +381,17 @@ static void unit_conversions() {
                 printf("\nEnter temperature in Celsius:");
                 input = safe_double();
                 result = celsius_to_fahrenheit(input);
+                printf("\n----------- Calculation Result -----------\n");
                 printf("%.6f°C = %.6f°F\n", input, result);
+                printf("-----------------------------------------\n");
             } 
             else if (conversion2 == 2) {
                 printf("\nEnter temperature in Fahrenheit:");
                 input = safe_double();
                 result = fahrenheit_to_celsius(input);
+                printf("\n----------- Calculation Result -----------\n");
                 printf("%.6f°F = %.6f°C\n", input, result);
+                printf("-----------------------------------------\n");
             } 
             else {
                 printf("Invalid choice.\n");
@@ -378,13 +410,18 @@ static void unit_conversions() {
                 printf("\nEnter length in meters:");
                 input = safe_double();
                 result = meters_to_feet(input);
+                printf("\n----------- Calculation Result -----------\n");
                 printf("%.6f meters = %.6f feet\n", input, result);
+                printf("-----------------------------------------\n");
             } 
             else if (conversion3 == 2) {
                 printf("\nEnter length in Feet:");
                 input = safe_double();
                 result = feet_to_meters(input);
+                printf("\n----------- Calculation Result -----------\n");
                 printf("%.6f feet = %.6f meters\n", input, result);
+                printf("-----------------------------------------\n");
+                
             } 
             else {
                 printf("Invalid choice.\n");
@@ -403,13 +440,17 @@ static void unit_conversions() {
                 printf("\nEnter angle in Degrees:");
                 input = safe_double();
                 result = degrees_to_radians(input);
+                printf("\n----------- Calculation Result -----------\n");
                 printf("%.6f° = %.6f radians\n", input, result);
+                printf("-----------------------------------------\n");
             } 
             else if (conversion4 == 2) {
                 printf("\nEnter angle in Radians:");
                 input = safe_double();
                 result = radians_to_degrees(input);
+                printf("\n----------- Calculation Result -----------\n");
                 printf("%.6f radians = %.6f°\n", input, result);
+                printf("-----------------------------------------\n");
             } 
             else {
                 printf("Invalid choice.\n");

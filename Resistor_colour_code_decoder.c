@@ -3,8 +3,8 @@
 #include <math.h>
 
 //constant values
-const char* colour_names[]= {"Black","Brown","Red","Orange","Yellow","Green","Blue","Violet","Gray","White"};
-double tolerance_values[]= {0.01, 0.02, 0.005, 0.0025, 0.001, 0.0005, 0.05, 0.10, 0.20};
+static const char* colour_names[]= {"Black","Brown","Red","Orange","Yellow","Green","Blue","Violet","Gray","White"};
+static double tolerance_values[]= {0.01, 0.02, 0.005, 0.0025, 0.001, 0.0005, 0.05, 0.10, 0.20};
 
 
 void Resistor_colour_code_decoder(void);
@@ -101,9 +101,11 @@ void Resistor_colour_code_decoder(void) {
 
     do {
         printf("\n----------- Resistor Colour Code Decoder -----------\n");
-        printf("1. Decode a resistor\n");
+        printf("1. Decode a Resistor\n");
         printf("2. Return to Main Menu\n");
-        printf("Enter your choice: ");
+        printf("----------------------------------------------------\n");
+        printf("Select an option: ");
+
         choice = safe_int_range(1, 2);
 
         if (choice == 1) {
@@ -127,18 +129,20 @@ void Resistor_colour_code_decoder(void) {
             double min_value = resistance * (1 - percent);
 
         
-            printf("\nDecoding Results\n");
-            printf("Color Code: %s - %s - %s - %s\n", colour_names[band1], colour_names[band2], 
-                    colour_names[multiplier], tolerance1);
-            printf("Resistor value:");
+            printf("\n----------- Decoding Result -----------\n");
+
+            printf("Colour Code        : %s - %s - %s - %s\n",colour_names[band1],colour_names[band2],colour_names[multiplier],tolerance1);
+            printf("Resistor value     : ");
             print_resistance_with_units(resistance);
-            printf("\nTolerance: %s", tolerance1);
-            printf("\nActual resistance range:");
+
+            printf("\nTolerance          : %s\n", tolerance1);
+
+            printf("Range              : ");
             print_resistance_with_units(min_value);
             printf(" ~ ");
             print_resistance_with_units(max_value);
-            printf("\n\n");
 
+            printf("\n---------------------------------------\n");
         }
     } while (choice != 2);
 

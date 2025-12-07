@@ -24,11 +24,12 @@ void Basic_circuit_analyser() {
 
     do {
         printf("\n----------- Basic Circuit Analyser -----------\n");
-        printf("1. Analyse Series Circuit\n");
-        printf("2. Analyse Parallel Circuit\n");
-        printf("3. Analyse Mixed Circuit\n");
-        printf("4. Exit\n"); 
-        printf("Enter your choice: ");
+        printf("1. Series Circuit Analysis\n");
+        printf("2. Parallel Circuit Analysis\n");
+        printf("3. Mixed Circuit Analysis\n");
+        printf("4. Return to Main Menu\n");
+        printf("----------------------------------------------\n");
+        printf("Select an option: ");
         choice = safe_int_range(1, 4);
 
         switch (choice) {
@@ -61,7 +62,8 @@ static void calculate_current(double resistance) {
     printf("Enter Voltage source (Volts): ");
     voltage = safe_double();
     if (voltage < 0) {
-        printf("Voltage cannot be negative.\n");
+        printf("Voltage cannot be negative. Enter again:\n");
+        voltage = safe_double();
         return;
     }
 
@@ -122,6 +124,10 @@ static void analyse_series_circuit(void) {
     series_resistors = safe_int_range(1, 100);
         
     double* resistors = (double*)malloc(series_resistors * sizeof(double));
+    if (resistors == NULL) {
+        printf("Error: not enough memory.\n");
+        return; 
+    }
         
     printf("Enter resistor values (in ohms):\n");
     for (int i = 0; i < series_resistors; i++) {
@@ -132,9 +138,13 @@ static void analyse_series_circuit(void) {
         
     double total_resistance = calculate_series_resistance(resistors, series_resistors);
         
-    printf("\nTotal resistance: ");
+    printf("\n----------- Calculation Result -----------\n");
+    printf("Total Resistance : ");
     print_resistance_with_units(total_resistance);
-    calculate_current(total_resistance); 
+    printf("-----------------------------------------\n");
+
+    calculate_current(total_resistance);
+
       
     free(resistors);
 }
@@ -147,6 +157,10 @@ static void analyse_parallel_circuit(void) {
     parallel_resistors = safe_int_range(1, 100);
         
     double* resistors = (double*)malloc(parallel_resistors * sizeof(double));
+    if (resistors == NULL) {
+        printf("Error: not enough memory.\n");
+        return; 
+    }
         
     printf("Enter resistor values (in ohms):\n");
     for (int i = 0; i < parallel_resistors; i++) {
@@ -156,9 +170,13 @@ static void analyse_parallel_circuit(void) {
         
     double total_resistance = calculate_parallel_resistance(resistors, parallel_resistors);
         
-    printf("\nTotal resistance: ");
+    printf("\n----------- Calculation Result -----------\n");
+    printf("Total Resistance : ");
     print_resistance_with_units(total_resistance);
+    printf("-----------------------------------------\n");
+
     calculate_current(total_resistance);
+
     
     free(resistors);
 }
@@ -241,9 +259,13 @@ static void analyse_mixed_circuit(void) {
 
     } while (choice != 2);
 
-    printf("\nFinal Result:\n");
-    print_resistance_with_units(current_resistor); 
+    printf("\n----------- Calculation Result -----------\n");
+    printf("Final Resistance : ");
+    print_resistance_with_units(current_resistor);
+    printf("-----------------------------------------\n");
+
     calculate_current(current_resistor);
+
 }
 
 

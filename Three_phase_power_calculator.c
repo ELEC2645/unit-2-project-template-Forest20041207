@@ -54,9 +54,17 @@ static void calculate_three_phase_power(void) {
 
     printf("Enter Line Voltage (V): ");
     line_voltage = safe_double();
+    while (line_voltage <= 0) {
+        printf("Voltage must be positive. Enter again: ");
+        line_voltage = safe_double();
+    }
     
     printf("Enter Line Current (A): ");
     line_current = safe_double();
+    while (line_current <= 0) {
+        printf("Current must be positive. Enter again: ");
+        line_current = safe_double();
+    }
 
     printf("Enter Phase Angle φ (degrees, positive for Inductive, negative for Capacitive): ");
     phase_angle = safe_double();
@@ -90,14 +98,15 @@ static void calculate_three_phase_power(void) {
         printf("(Resistive)\n");
     }
     
-    printf("1. Total Apparent Power (S): ");
+    printf("\n----------- Three-Phase Power Result -----------\n");
+    printf("Apparent Power (S): ");
     print_power_with_units(apparent_power_S, "VA");
-    
-    printf("2. Total Active Power (P): ");
+    printf("Active Power   (P): ");
     print_power_with_units(active_power_P, "W");
-    
-    printf("3. Total Reactive Power (Q): ");
-    print_power_with_units(reactive_power_Q, "VAR"); 
+    printf("Reactive Power (Q): ");
+    print_power_with_units(reactive_power_Q, "VAR");
+    printf("-----------------------------------------------\n");
+
     
     
     if (connection_choice == 1) { 
@@ -117,8 +126,10 @@ void Three_phase_power_calculator(void) {
     do {
         printf("\n----------- Three-Phase Power Calculator -----------\n");
         printf("1. Start Calculation\n");
-        printf("2. Exit\n");
-        printf("Enter your choice: ");
+        printf("2. Return to Main Menu\n");
+        printf("----------------------------------------------------\n");
+        printf("Select an option: ");
+
         choice = safe_int_range(1, 2);
 
         switch (choice) {
